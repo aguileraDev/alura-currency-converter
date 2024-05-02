@@ -1,5 +1,7 @@
 package com.aluracursos.currencyconverter.api;
 
+import com.aluracursos.currencyconverter.mapper.CurrencyMapper;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,16 +14,15 @@ import java.util.concurrent.ExecutionException;
  * @author Manuel Aguilera
  */
 public class ApiConnector {
-    private static final String API_URL = "https://v6.exchangerate-api.com/v6/a3eccac6f0950c9540295ef9/latest/";
+    private static final String API_URL = "https://v6.exchangerate-api.com/v6/a3eccac6f0950c9540295ef9/latest/USD";
     private static String responseBody;
 
-    public static String apiRequest(String baseCode){
-        String url = API_URL+baseCode;
+    public static String createRequest(){
 
        try {
            HttpRequest request = HttpRequest
                    .newBuilder()
-                   .uri(URI.create(url))
+                   .uri(URI.create(API_URL))
                    .build();
 
            HttpClient client = HttpClient.newBuilder().build();
@@ -35,8 +36,8 @@ public class ApiConnector {
            System.out.println("Ha ocurrido un error al realizar la peticion HTTP");
            e.getMessage();
        }
-
-        return getResponseBody();
+        CurrencyMapper.jsonToDto(getResponseBody());
+        return "Success";
 
     }
 
